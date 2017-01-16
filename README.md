@@ -43,5 +43,6 @@ Una vez configurado reiniciamos el servicio networking y pasamos a configurar la
 https://github.com/CuriosoInformatico/HoneyCheck/wiki/2---Configuraci%C3%B3n
 
 Una vez configurada se podrá iniciar dentro del entorno virtual.
+
     # source venv/bin/activate
     # ./HoneyCheck/honeycheck.py
