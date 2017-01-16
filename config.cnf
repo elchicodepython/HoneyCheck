@@ -1,0 +1,8 @@
+# Sample configuration
+[br0]
+discover_timeout = 1
+fail_test = script.Script.exec
+fail_test_script_path = scripts/zenity_fail+ebtables_rule.sh
+whitelist = 192.168.1.1
+pass_test = script.Script.exec
+pass_test_script_path = scripts/zenity_pass.sh
