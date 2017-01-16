@@ -26,6 +26,8 @@ https://wiki.debian.org/BridgeNetworkConnections#Configuring_bridging_in_.2Fetc.
 
 En siguiente exto sale de ahí con la adaptación de que en nuestro caso solo queremos hacer un bridge por interfaz para poder controlarlas de forma independiente.
 
+ATENCIÓN. Si usas network-manager deberás crear el bridge a través de él.
+
 > auto lo br0
 
 > iface lo inet loopback
@@ -36,4 +38,10 @@ En siguiente exto sale de ahí con la adaptación de que en nuestro caso solo qu
 
 >    bridge_ports eth0
 
+Una vez configurado reiniciamos el servicio networking y pasamos a configurar la aplicación.
 
+https://github.com/CuriosoInformatico/HoneyCheck/wiki/2---Configuraci%C3%B3n
+
+Una vez configurada se podrá iniciar dentro del entorno virtual.
+    # source venv/bin/activate
+    # ./HoneyCheck/honeycheck.py
