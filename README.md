@@ -32,7 +32,7 @@ ATENCIÓN. Si usas network-manager deberás crear el bridge a través de él.
 
 > iface lo inet loopback
 
-> iface eth0 inet manual
+> iface eth0 inet dhcp
 
 >iface br0 inet dhcp
 
