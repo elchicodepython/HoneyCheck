@@ -1,14 +1,39 @@
 # HoneyCheck
 
-Honeycheck is a rogue DHCP server modular whatcher made in Python3 that can be easily extended with new functionalities.
+Versión: ALFA 0.1
 
-All the documentation is explained in three diferent sites:
+HoneyCheck es una utilidad para controlar que no haya servidores DHCP no legítimos dentro de la red en la que nos encontramos y proveer un entorno de actuación modular y totalmente configurable en caso de encontrarlos.
 
-  Text Documentation can be found in
+
+  Wiki:
   https://github.com/CuriosoInformatico/HoneyCheck/wiki
 
-  VideoTutorials can be found in 
-  http://honeycheck.curiosoinformatico.com/videos
- 
-  Man page inside GNU/Linux
-  `man honeycheck`
+
+Para empezar a jugar con HoneyCheck primero hay que cumplir con sus dependencias. 
+
+Instalaremos scapy en un entorno virtual para no tocar el entorno de instalación de Python de la máquina real.
+
+    $ git clone https://github.com/CuriosoInformatico/HoneyCheck
+    # apt-get install -y python3 python3-virtualenv virtualenv bridge-utils tcpdump
+    $ virtualenv -p /usr/bin/python3 venv
+    $ source venv/bin/activate
+    $ pip install scapy-python3
+    
+HoneyCheck necesita configurar la interfaz que vayamos a configurar en modo bridge:
+Esto se puede configurar en el fichero /etc/network/interfaces siguiendo el siguiente enlace.
+
+https://wiki.debian.org/BridgeNetworkConnections#Configuring_bridging_in_.2Fetc.2Fnetwork.2Finterfaces
+
+En siguiente exto sale de ahí con la adaptación de que en nuestro caso solo queremos hacer un bridge por interfaz para poder controlarlas de forma independiente.
+
+> auto lo br0
+
+> iface lo inet loopback
+
+> iface eth0 inet manual
+
+>iface br0 inet dhcp
+
+>    bridge_ports eth0
+
+
