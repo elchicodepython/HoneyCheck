@@ -24,7 +24,7 @@ Esto se puede configurar en el fichero /etc/network/interfaces siguiendo el sigu
 
 https://wiki.debian.org/BridgeNetworkConnections#Configuring_bridging_in_.2Fetc.2Fnetwork.2Finterfaces
 
-En siguiente exto sale de ahí con la adaptación de que en nuestro caso solo queremos hacer un bridge por interfaz para poder controlarlas de forma independiente.
+En siguiente texto sale de ahí con la adaptación de que en nuestro caso solo queremos hacer un bridge por interfaz para poder controlarlas de forma independiente.
 
 ATENCIÓN. Si usas network-manager deberás crear el bridge a través de él.
 
