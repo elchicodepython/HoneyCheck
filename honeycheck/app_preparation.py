@@ -4,10 +4,9 @@ import importlib
 
 import logging.handlers
 import sys
-import os.path
 
-from config import config, CONFIG_FILE
-from dhcp_watchmen import DHCPWatchmen
+from .config import config
+from .dhcp_watchmen import DHCPWatchmen
 
 
 LOG_LEVEL = logging.DEBUG
@@ -38,9 +37,8 @@ def get_control_objects(iface, name):
 
     for control_object in control_objects_str:
         # Import the control module defined in the configuration
-        control_object_module_str = ".".join(control_object.split('.')[:-2])
-        control_object_class_str = control_object.split('.')[-2]
-        control_object_method_str = control_object.split('.')[-1]
+        control_object_module_str = ".".join(control_object.split('.')[:-1])
+        control_object_class_str = control_object.split('.')[-1]
         try:
             control_object_module = importlib.import_module(
                 control_object_module_str
@@ -77,28 +75,30 @@ def get_control_objects(iface, name):
     return control_objects
 
 
-# If HoneyCHECK is not configured exit
-if len(config.sections()) == 0:
-    logger.error(
-        "You should configure honeycheck before using it\n"
-        "Read the docs at https://github.com/ElChicoDePython/HoneyCheck"
-    )
-
-    sys.exit(1)
 
 
-def start_the_party():
+def start_the_party(config, config_file):
+
+    # If HoneyCHECK is not configured exit
+    if len(config.sections()) == 0:
+        logger.error(
+            "You should provide a valid configuration to honeycheck before using it\n"
+            "Read the docs at https://github.com/elchicodepython/HoneyCheck"
+        )
+
+        sys.exit(1)
+
+
     ifaces = config.sections()
 
     if len(ifaces) == 0:
         logger.critical(
-            "Fail to check the configuration file in "
-            + os.path.abspath(CONFIG_FILE)
+            "Fail to check the configuration file in " + config_file
         )
         sys.exit(2)
 
     for iface in ifaces:
-        logger.info(iface + ": FOUND IN " + CONFIG_FILE)
+        logger.info(iface + ": FOUND IN " + config_file)
         try:
             timeout = int(config[iface]["discover_timeout"])
             logger.info("Stablished timeout = %s seconds" % timeout)
@@ -135,7 +135,3 @@ def start_the_party():
         )
         Thread(target=watchmen.sniff_dhcp).start()
         Thread(target=watchmen.dhcp_discovery_daemon, args=(timeout,)).start()
-
-
-if __name__ == "__main__":
-    start_the_party()

@@ -1,6 +1,5 @@
 from os import system
 from .base_control import ControlModule
-from config import BASEDIR
 
 
 class Script(ControlModule):
@@ -22,11 +21,8 @@ class Script(ControlModule):
         whitelisted = ""
         if len(whitelist) > 0:
             whitelisted = whitelist[0]
-        import os
 
-        script_path = self.get_req(self.config_requirements[0])
-        if not script_path.startswith("/"):
-            script_path = os.path.join(BASEDIR, script_path)
+        script_path = self.get_req("script_path")
 
         servers = [server.ip + "," + server.hw for server in servers.values()]
         system(script_path + " " + " ".join(servers) + "-" + whitelisted)

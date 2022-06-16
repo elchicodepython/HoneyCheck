@@ -4,6 +4,7 @@ from ..config import config
 
 class ControlModule(ABC):
     def __init__(self, iface, prefix, config_requirements):
+        self._prefix = prefix
         self.iface = iface
         self.config_requirements = [
             prefix + "_" + requirement for requirement in config_requirements
@@ -24,7 +25,7 @@ class ControlModule(ABC):
         return True
 
     def get_req(self, requirement):
-        return config[self.iface][requirement]
+        return config[self.iface][self._prefix + "_" + requirement]
 
     @abstractmethod
     def apply_actions(self, **kwargs):

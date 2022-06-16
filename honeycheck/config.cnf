@@ -1,7 +1,10 @@
 # Sample configuration
 [wlp0s20f3]
+	# Less than 30 seconds can give flapping false negatives
 	discover_timeout = 30
-	fail_test = honeycheck.modules.script.Script
+
+    # test syntax: module.ControlClass
+	fail_test =    honeycheck.modules.script.Script
 	fail_test_script_path = scripts/zenity_fail.sh
 
 	pass_test = honeycheck.modules.script.Script
