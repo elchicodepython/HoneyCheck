@@ -2,17 +2,14 @@
 
 ![Honeycheck logo](assets/honeycheck_horizontal.png)
 
-Honeycheck detects rogue dhcp servers and provides a modular and fully
+Honeycheck detects rogue DHCP servers and provides a modular and fully
 configurable action environment in case they are found.
-
-If you want a quick setup and you have a Raspberry-Pi go directly to [Raspberry
-Pi Images section](#raspberry-pi-images).
 
 ### Doc Index
 
 - [System requirements](#system-requirements)
-- [System configuration](#system-configuration)
 - [Honeycheck installaton](#honeycheck-installation)
+- [Configuring honeycheck](#configuring-honeycheck)
 - [Running honeycheck](#running-honeycheck)
 - [Donations and Sponsorships](#donations-and-sponsorships)
 
@@ -23,31 +20,52 @@ Pi Images section](#raspberry-pi-images).
 apt-get install -y python3 virtualenv bridge-utils tcpdump
 ```
 
-## System configuration
-
-HoneyCheck needs to configure the interface that we are going to configure in
-bridge mode.
-
-This can be configured in the /etc/network/interfaces file:
-https://wiki.debian.org/BridgeNetworkConnections#Configuring_bridging_in_.2Fetc.2Fnetwork.2Finterfaces
-
-In the following text, it goes from there with the adaptation that in our case
-we only want to make a bridge per interface to be able to control them
-independently.
-
 ## Honeycheck Installation
 
 ```bash
 pip install honeycheck
 ```
 
+## Configuring Honeycheck
+
+Honeycheck requires a configuration file as a parameter.
+
+The interfaces on which it will work must be indicated in the configuration
+file.
+
+For each interface, you must define which control module will be executed when
+a malicious `test_fail` server is detected or when it apparently stops being
+detected test_pass.
+
+Control objects are highly customizable pieces of software. Each module
+receives parameters that must be configured.
+
+The control object `honeycheck.modules.script.Script` allows the execution of
+scripts and receives the script to execute as a parameter.
+
+Depending on the check, the parameter will be prefixed with `test_fail` or 
+`test_pass`.
+
+```
+### Sample configuration
+
+[wlp0s20f3]
+	# Less than 30 seconds can give flapping false negatives
+	discover_timeout = 30
+
+    # test syntax: module.ControlClass
+	fail_test =    honeycheck.modules.script.Script
+	fail_test_script_path = scripts/zenity_fail.sh
+
+	pass_test = honeycheck.modules.script.Script
+	pass_test_script_path = scripts/zenity_pass.sh
+
+```
+
 ## Running Honeycheck
 
-Once configured, we restart the networking service and proceed to configure the
-application.
-
 Once Honeycheck is configured it can be started running `python3 -m honeycheck
--c our_conf_file.ini`
+-c our_conf_file.cnf`
 
 ## Donations and Sponsorships
 
