@@ -1,8 +1,0 @@
-# Sample configuration
-[br0]
-	discover_timeout = 30
-	fail_test = honeycheck.modules.script.Script.exec
-	fail_test_script_path = scripts/zenity_fail.sh
-
-	pass_test = honeycheck.modules.script.Script.exec
-	pass_test_script_path = scripts/zenity_pass.sh
