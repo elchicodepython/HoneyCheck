@@ -1,48 +1,82 @@
-# HoneyCheck
+# HoneyCheck - Detect Rogue DHCP Servers in your network
 
-Versión: ALFA 0.1
+![Honeycheck logo](assets/honeycheck_horizontal.png)
 
-HoneyCheck es una utilidad para controlar que no haya servidores DHCP no legítimos dentro de la red en la que nos encontramos y proveer un entorno de actuación modular y totalmente configurable en caso de encontrarlos.
+Honeycheck detects rogue dhcp servers and provides a modular and fully
+configurable action environment in case they are found.
+
+If you want a quick setup and you have a Raspberry-Pi go directly to [Raspberry
+Pi Images section](#raspberry-pi-images).
+
+### Doc Index
+
+- [System requirements](#system-requirements)
+- [System configuration](#system-configuration)
+- [Honeycheck installaton](#honeycheck-installation)
+- [Running honeycheck](#running-honeycheck)
+- [Donations and Sponsorships](#donations-and-sponsorships)
 
 
-  Wiki:
-  https://github.com/CuriosoInformatico/HoneyCheck/wiki
+## System requirements
 
+```bash
+apt-get install -y python3 virtualenv bridge-utils tcpdump
+```
 
-Para empezar a jugar con HoneyCheck primero hay que cumplir con sus dependencias. 
+## System configuration
 
-Instalaremos scapy en un entorno virtual para no tocar el entorno de instalación de Python de la máquina real.
+HoneyCheck needs to configure the interface that we are going to configure in
+bridge mode.
 
-    $ git clone https://github.com/CuriosoInformatico/HoneyCheck
-    # apt-get install -y python3 python3-virtualenv virtualenv bridge-utils tcpdump
-    $ virtualenv -p /usr/bin/python3 venv
-    $ source venv/bin/activate
-    $ pip install scapy-python3
-    
-HoneyCheck necesita configurar la interfaz que vayamos a configurar en modo bridge:
-Esto se puede configurar en el fichero /etc/network/interfaces siguiendo el siguiente enlace.
-
+This can be configured in the /etc/network/interfaces file:
 https://wiki.debian.org/BridgeNetworkConnections#Configuring_bridging_in_.2Fetc.2Fnetwork.2Finterfaces
 
-En siguiente texto sale de ahí con la adaptación de que en nuestro caso solo queremos hacer un bridge por interfaz para poder controlarlas de forma independiente.
+In the following text, it goes from there with the adaptation that in our case
+we only want to make a bridge per interface to be able to control them
+independently.
 
-ATENCIÓN. Si usas network-manager deberás crear el bridge a través de él.
+## Honeycheck Installation
 
-> auto lo br0
+```bash
+pip install honeycheck
+```
 
-> iface lo inet loopback
+## Running Honeycheck
 
-> iface eth0 inet manual
+Once configured, we restart the networking service and proceed to configure the
+application.
 
->iface br0 inet dhcp
+Once Honeycheck is configured it can be started running `python3 -m honeycheck
+-c our_conf_file.ini`
 
->    bridge_ports eth0
+## Donations and Sponsorships
 
-Una vez configurado reiniciamos el servicio networking y pasamos a configurar la aplicación.
+![Donations](assets/donations.png)
 
-https://github.com/CuriosoInformatico/HoneyCheck/wiki/2---Configuraci%C3%B3n
+### Donations from people/companies
 
-Una vez configurada se podrá iniciar dentro del entorno virtual.
+If this tool is useful to you, please consider making a donation to support my
+work.
 
-    # source venv/bin/activate
-    # ./HoneyCheck/honeycheck.py
+Donations allow me to continue developing open source software to contribute
+and grow our community.
+
+I wish some day I could focus only on creating quality open source with a
+strong community
+supporting my projects.
+
+You support me on https://ko-fi.com/elchicodepython.
+
+### Sponsorships
+
+If your company uses this tool and would like it to have a specific feature,
+your company can sponsor its development.
+
+To sponsor the development of a feature [contact
+me](https://es.linkedin.com/in/sam-sec).
+
+### Product integration advertising
+
+If you want the integration of this tool with your solution to appear in this
+Readme, [contact me](https://es.linkedin.com/in/sam-sec).
+
