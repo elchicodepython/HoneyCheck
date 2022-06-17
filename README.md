@@ -46,6 +46,14 @@ scripts and receives the script to execute as a parameter.
 Depending on the check, the parameter will be prefixed with `fail_test`,
 `pass_test` or `final_exec`.
 
+- fail_test will be executed if a rogue DHCP server is detected
+- pass_test will be executed if a rogue DHCP seems to be removed from the network
+> pass_test can through false_negatives if the rogue_dhcp response are not detected
+  in a period of time.
+- final_exec will be executed after each check
+
+The configuration file must be created before running honeycheck
+
 ```
 ### Sample configuration
 
@@ -60,6 +68,8 @@ Depending on the check, the parameter will be prefixed with `fail_test`,
 	pass_test = honeycheck.modules.script.Script
 	pass_test_script_path = scripts/zenity_pass.sh
 
+	pass_test = honeycheck.modules.script.Script
+	pass_test_script_path = /my/custom/script
 ```
 
 ## Running Honeycheck
