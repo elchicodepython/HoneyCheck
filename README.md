@@ -52,16 +52,19 @@ Depending on the check, the parameter will be prefixed with `fail_test`,
   in a period of time.
 - final_exec will be executed after each check
 
-The configuration file must be created before running honeycheck
+The configuration file must be created before running honeycheck.
 
-```
-### Sample configuration
+### Configuration sample
 
-[wlp0s20f3]
+> Note that honeycheck can work in multiple network interfaces at the same time.
+
+
+```ini
+[wlp0s20f3] # Configuration for wlp0s20f3 network interface
 	# Less than 30 seconds can give flapping false negatives
 	discover_timeout = 30
-
-    # test syntax: module.ControlClass
+	
+	# test syntax: module.ControlClass
 	fail_test =    honeycheck.modules.script.Script
 	fail_test_script_path = scripts/zenity_fail.sh
 
@@ -70,6 +73,12 @@ The configuration file must be created before running honeycheck
 
 	pass_test = honeycheck.modules.script.Script
 	pass_test_script_path = /my/custom/script
+
+[eth0]
+	discover_timeout = 30
+	fail_test =    honeycheck.modules.script.Script
+	fail_test_script_path = scripts/zenity_fail.sh
+
 ```
 
 ## Running Honeycheck
