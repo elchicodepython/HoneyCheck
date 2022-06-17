@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 from threading import Thread
 import importlib
-
+from typing import List
 import logging.handlers
 import sys
 
-from .config import config
+from .modules.base_control import BaseControl, ControlConfiguration
 from .dhcp_watchmen import DHCPWatchmen
 
 
@@ -24,21 +24,15 @@ ch.setFormatter(formatter)
 logger.addHandler(ch)
 
 
-def get_control_objects(iface, name):
-    """
-    :param iface:
-    :param name:
-    :return: list of objects inherited from honeycheckModule
-    :rtype list
-    """
+def get_control_objects(iface_config: dict, control_type: str) -> List[BaseControl]:
 
-    control_objects_str = [co.strip() for co in config[iface][name].split(",")]
+    control_objects_str = [co.strip() for co in iface_config[control_type].split(",")]
     control_objects = []
 
-    for control_object in control_objects_str:
+    for control_object_str in control_objects_str:
         # Import the control module defined in the configuration
-        control_object_module_str = ".".join(control_object.split('.')[:-1])
-        control_object_class_str = control_object.split('.')[-1]
+        control_object_module_str = ".".join(control_object_str.split('.')[:-1])
+        control_object_class_str = control_object_str.split('.')[-1]
         try:
             control_object_module = importlib.import_module(
                 control_object_module_str
@@ -52,23 +46,26 @@ def get_control_objects(iface, name):
             control_object_class_str
         )
 
-        control_object = ControlClass(iface, name)  # Instance of the Control Object
+        control_object = ControlClass()  # Instance of the Control Object
+        control_configuration = ControlConfiguration(iface_config, control_type)
+        control_object.set_conf(control_configuration)
+        control_object_requirements = control_object.get_conf_req()
 
-        if control_object.check_dependencies():
-            if control_object.check_requirements():
+        if control_object_requirements.check_dependencies(control_configuration):
+            if control_object_requirements.check_requirements(control_configuration):
                 control_objects.append(control_object)
             else:
                 logger.critical(
                     "Requirements "
-                    + str(control_object.config_requirements)
+                    + str(control_object_requirements.config_requirements)
                     + " check failed in "
-                    + control_object.__class__.__name__
+                    + control_object_str
                 )
                 return []
         else:
             logger.critical(
                 "Dependencies check failed in module "
-                + control_object.__class__.__name__
+                + control_object_str
             )
             return []
 
@@ -76,8 +73,7 @@ def get_control_objects(iface, name):
 
 
 
-
-def start_the_party(config, config_file):
+def start_the_party(config: dict, config_file: str):
 
     # If HoneyCHECK is not configured exit
     if len(config.sections()) == 0:
@@ -117,17 +113,17 @@ def start_the_party(config, config_file):
         fail_objects = (
             []
             if "fail_test" not in config[iface]
-            else get_control_objects(iface, "fail_test")
+            else get_control_objects(config[iface], "fail_test")
         )
         pass_objects = (
             []
             if "pass_test" not in config[iface]
-            else get_control_objects(iface, "pass_test")
+            else get_control_objects(config[iface], "pass_test")
         )
         final_objects = (
             []
             if "final_exec" not in config[iface]
-            else get_control_objects(iface, "final_exec")
+            else get_control_objects(config[iface], "final_exec")
         )
 
         watchmen = DHCPWatchmen(

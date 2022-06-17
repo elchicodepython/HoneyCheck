@@ -1,6 +1,10 @@
 import argparse
+from configparser import ConfigParser
+
 from .app_preparation import start_the_party
-from .config import config as conf
+
+
+conf = ConfigParser()
 
 
 def parse_args():
