@@ -86,6 +86,44 @@ The configuration file must be created before running honeycheck.
 Once Honeycheck is configured it can be started running `python3 -m honeycheck
 -c our_conf_file.cnf`
 
+## Extending Honeycheck
+
+You can create your own modules to configure the behavior of honeycheck.
+
+To do this all you have to do is inherit from the BaseControl abstract class located in `honeycheck.modules.base_control`.
+
+### Example of a Custom Control Object
+
+```python
+from honeycheck.modules.base_control import BaseControl, ControlConfigurationReq
+
+
+class MyCustomControlObject(BaseControl):
+    def apply_actions(self, dhcp_watcher, **kwargs):
+        servers = dhcp_watcher.dhcp_servers
+        whitelist = dhcp_watcher.whitelist
+
+        # Retrieve a param value from configuration
+        script_path = self._conf.get_req("script_path")
+
+        # Do your stuff here...
+        # Send an email, open an issue, publish a message to rabbitmq. whatever
+        # you want.
+
+
+    def get_conf_req(self) -> ControlConfigurationReq:
+        # Return a ControlConfigurationReq object with the required
+        # configuration this control object needs
+        return ControlConfigurationReq(["script_path"])
+```
+
+Once you have created your custom control object you will need to add it to
+your system as a python package.
+
+After this you will be able to select it in the honeycheck configuration. 
+`fail_test = mycustom_module.MyCustomControlObject`
+
+
 ## Donations and Sponsorships
 
 ![Donations](assets/donations.png)
