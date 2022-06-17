@@ -34,8 +34,8 @@ The interfaces on which it will work must be indicated in the configuration
 file.
 
 For each interface, you must define which control module will be executed when
-a malicious `test_fail` server is detected or when it apparently stops being
-detected test_pass.
+a malicious `fail_test` server is detected or when it apparently stops being
+detected pass_test.
 
 Control objects are highly customizable pieces of software. Each module
 receives parameters that must be configured.
@@ -43,8 +43,8 @@ receives parameters that must be configured.
 The control object `honeycheck.modules.script.Script` allows the execution of
 scripts and receives the script to execute as a parameter.
 
-Depending on the check, the parameter will be prefixed with `test_fail` or 
-`test_pass`.
+Depending on the check, the parameter will be prefixed with `fail_test`,
+`pass_test` or `final_exec`.
 
 ```
 ### Sample configuration
@@ -97,4 +97,3 @@ me](https://es.linkedin.com/in/sam-sec).
 
 If you want the integration of this tool with your solution to appear in this
 Readme, [contact me](https://es.linkedin.com/in/sam-sec).
-
