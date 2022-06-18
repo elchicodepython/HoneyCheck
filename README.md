@@ -11,6 +11,7 @@ configurable action environment in case they are found.
 - [Honeycheck installaton](#honeycheck-installation)
 - [Configuring honeycheck](#configuring-honeycheck)
 - [Running honeycheck](#running-honeycheck)
+- [Extending honeycheck](#extending-honeycheck)
 - [Donations and Sponsorships](#donations-and-sponsorships)
 
 
